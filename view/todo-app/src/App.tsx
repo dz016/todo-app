@@ -4,7 +4,6 @@ import { createTheme, Theme, ThemeProvider } from "@mui/material/styles";
 import LandingPage from "./screens/LandingPage/LandingPage";
 
 import CssBaseline from "@mui/material/CssBaseline";
-//test
 
 const theme = createTheme({
   palette: {
