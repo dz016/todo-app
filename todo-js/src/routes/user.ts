@@ -9,6 +9,7 @@ import { jwtAuth } from "../middleware/jstAuth";
 router.post("/signup", async (req, res) => {
   try {
     const { username, password } = req.body;
+    console.log({ username, password });
 
     // Check if username and password are provided
     if (!username || !password) {
@@ -77,7 +78,7 @@ router.post("/login", async (req: Request, res: Response) => {
 });
 router.get("/me", jwtAuth, async (req, res) => {
   try {
-    const userId = req.headers["userId"] as string;
+    const userId = req.headers["userId"];
 
     if (!userId) {
       return res.status(403).json({ message: "User not logged in" });

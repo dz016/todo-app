@@ -13,7 +13,7 @@ const LandingPage = () => {
           sx={{
             display: "flex",
             justifyContent: "center",
-            backgroundColor: "#ECF8F7",
+
             alignItems: "center",
             height: "100vh",
           }}
@@ -42,7 +42,6 @@ const LandingPage = () => {
           sx={{
             display: "flex",
             justifyContent: "center",
-            backgroundColor: "#ECF8F7",
           }}
         >
           <div
