@@ -27,6 +27,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 
 import MailIcon from "@mui/icons-material/Mail";
+import { useSetRecoilState } from "recoil";
+import { SearchBarTextState } from "../../store/state_recoil";
 
 const drawerWidth = 240;
 const Search = styled("div")(({ theme }) => ({
@@ -71,6 +73,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function SideBar({ children }: { children: React.ReactNode }) {
+  const setText = useSetRecoilState(SearchBarTextState);
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -80,6 +83,9 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setText(e.target.value);
   };
 
   return (
@@ -114,6 +120,7 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
+              onChange={handleChange}
             />
           </Search>
           <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" sx={{}} />

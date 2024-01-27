@@ -3,7 +3,6 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-// TodoCard.tsx
 const TodoCard = (item: {
   title: string;
   description: string;
@@ -11,9 +10,15 @@ const TodoCard = (item: {
   userId: string;
 }) => {
   return (
-    <Card sx={{ minWidth: 225, padding: "1rem" }} raised>
-      <CardContent sx={{ width: "75%" }}>
-        <Typography variant="h4" component="div" textAlign="center">
+    <Card
+      sx={{
+        minWidth: 200,
+        padding: "0.5rem",
+      }}
+      raised
+    >
+      <CardContent>
+        <Typography variant="h5" component="div">
           {item.title}
         </Typography>
         <div style={{ height: "2rem" }}></div>
@@ -22,7 +27,7 @@ const TodoCard = (item: {
         </Typography>
         <Typography variant="body2">{item.description}</Typography>
       </CardContent>
-      <CardActions>
+      <CardActions sx={{ padding: "1rem" }}>
         <Button size="small" variant="contained" color="error">
           Delete
         </Button>
@@ -32,7 +37,7 @@ const TodoCard = (item: {
           color="success"
           disabled={item.done}
         >
-          Mark as done
+          Done
         </Button>
         <Button size="small" variant="contained" color="warning">
           edit
