@@ -7,6 +7,7 @@ import {
   FilterTodoListState,
   TodoListState,
   authState,
+  fetchTodoState,
 } from "../store/state_recoil";
 import { useEffect } from "react";
 import axios from "axios";
@@ -18,6 +19,7 @@ const breakpoints = {
 };
 
 const Home = () => {
+  const [fetchTodo, setFetchTodo] = useRecoilState(fetchTodoState);
   const auth = useRecoilValue(authState);
   const setTodos = useSetRecoilState(TodoListState);
   const getTodo = async () => {
@@ -46,13 +48,17 @@ const Home = () => {
         console.error("Unexpected error:", error);
       }
     }
+    setFetchTodo(!fetchTodo);
   };
 
   useEffect(() => {
-    getTodo();
-  }, [auth.token]);
+    if (!fetchTodo) {
+      getTodo();
+    }
+  }, [auth.token, fetchTodo]);
 
   const FilteredTodos = useRecoilValue(FilterTodoListState); // Change here
+
   return (
     <>
       <SideBar>

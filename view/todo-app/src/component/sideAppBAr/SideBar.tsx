@@ -156,6 +156,7 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
           {[
             { display: "Home", route: "/" },
             { display: "Create", route: "/create" },
+            { display: "Edit", route: "/Edit" },
           ].map((text, index) => (
             <Link
               to={text.route}

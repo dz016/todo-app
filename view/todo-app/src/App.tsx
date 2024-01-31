@@ -8,6 +8,7 @@ import Create from "./screens/create";
 import { authState } from "./store/state_recoil";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import Edit from "./screens/edit/edit";
 
 const theme = createTheme({
   palette: {
@@ -32,6 +33,7 @@ function App() {
               ></Route>
               <Route path="/" element={<Home></Home>}></Route>
               <Route path="/create" element={<Create></Create>}></Route>
+              <Route path="/edit/:id" element={<Edit></Edit>}></Route>
             </Routes>
           </Router>
         </ThemeProvider>
@@ -46,13 +48,12 @@ function InitState() {
   const init = async () => {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch("http://localhost:3000/auth/me", {
+      const response = await fetch("http://localhost:3000/user/me", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await response.json();
       if (data.username) {
         setAuth({ token: data.token, username: data.username });
-        navigate("/todos");
       } else {
         navigate("/landing");
       }
@@ -61,7 +62,12 @@ function InitState() {
     }
   };
   useEffect(() => {
-    init();
+    // Make the useEffect function asynchronous and use await for the async operation
+    const initialize = async () => {
+      await init();
+    };
+
+    initialize();
   }, []);
   return <></>;
 }

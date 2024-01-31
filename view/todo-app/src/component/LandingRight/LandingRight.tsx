@@ -29,6 +29,7 @@ const LandingLeft = () => {
         `http://localhost:3000/user/signup`,
         form
       );
+      navigate("/todos");
       if (!response.data.token) return;
       localStorage.setItem("token", response.data.token);
       navigate("/");

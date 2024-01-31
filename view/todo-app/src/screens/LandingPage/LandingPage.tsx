@@ -6,39 +6,13 @@ const LandingPage = () => {
   return (
     <>
       <Grid container>
-        <Grid
-          item
-          xs={12}
-          md={8}
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-
-            alignItems: "center",
-            height: "100vh",
-          }}
-        >
-          <div
-            style={{
-              width: "78%",
-
-              height: "70vh",
-              justifyContent: "space-evenly",
-
-              display: "flex",
-              flexDirection: "column",
-              gap: "2rem",
-
-              alignItems: "center",
-            }}
-          >
-            <LandingLeft />
-          </div>
+        <Grid item xs={12} md={7.5}>
+          <LandingLeft />
         </Grid>
         <Grid
           item
           xs={12}
-          md={4}
+          md={4.5}
           sx={{
             display: "flex",
             justifyContent: "center",

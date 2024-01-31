@@ -40,6 +40,37 @@ router.post("/", jwtAuth, async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+router.post("/:id/done", jwtAuth, async (req, res) => {
+  console.log("done");
+  try {
+    const userId = req.headers["userId"] as string;
+
+    if (!userId) {
+      return res.status(403).json({ message: "User not logged in" });
+    }
+
+    const todoId = req.params.id;
+
+    // Find the todo by id and user
+    const todo = await Todo.findOne({ _id: todoId, userId });
+
+    if (!todo) {
+      return res.status(404).json({ message: "Todo not found" });
+    }
+
+    // Toggle the 'done' property
+    todo.done = !todo.done;
+
+    // Save the updated todo
+    const updatedTodo = await todo.save();
+
+    res.status(200).json({ todo: updatedTodo });
+  } catch (error) {
+    console.error("Error marking todo as done:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 router.put("/:id", jwtAuth, async (req, res) => {
   try {
     const { title, description, done } = req.body;

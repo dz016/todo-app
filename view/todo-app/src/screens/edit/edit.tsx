@@ -1,4 +1,4 @@
-import SideBar from "../component/sideAppBAr/SideBar";
+import SideBar from "../../component/sideAppBAr/SideBar";
 import { Container } from "@mui/material";
 import { Typography } from "@mui/material";
 import { TextField } from "@mui/material";
@@ -7,7 +7,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { fetchTodoState } from "../store/state_recoil";
+import { fetchTodoState } from "../../store/state_recoil";
+import { useParams, useLocation } from "react-router-dom";
 
 interface CreteType {
   title: String;
@@ -15,7 +16,9 @@ interface CreteType {
   done: Boolean;
 }
 
-const Create = () => {
+const Edit = () => {
+  const location = useLocation();
+  const item = location.state || {};
   const [fetchTodo, setFetchTodo] = useRecoilState(fetchTodoState);
   const navigate = useNavigate();
   const [form, setForm] = useState<CreteType>({
@@ -23,7 +26,7 @@ const Create = () => {
     description: "",
     done: false,
   });
-
+  const { id } = useParams();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
@@ -35,10 +38,16 @@ const Create = () => {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     };
 
+    console.log({ ...form, done: item.done }, item._id, id);
+
     try {
-      const response = await axios.post("http://localhost:3000/todo", form, {
-        headers,
-      });
+      const response = await axios.put(
+        `http://localhost:3000/todo/${id}`,
+        { ...form, done: item.done },
+        {
+          headers,
+        }
+      );
 
       navigate("/");
       setFetchTodo(!fetchTodo);
@@ -65,7 +74,7 @@ const Create = () => {
     <>
       <SideBar>
         <Container maxWidth="lg">
-          <Typography variant="h1">Create</Typography>
+          <Typography variant="h1">Edit</Typography>
           <TextField
             name="title"
             id="outlined-controlled"
@@ -96,4 +105,4 @@ const Create = () => {
   );
 };
 
-export default Create;
+export default Edit;
