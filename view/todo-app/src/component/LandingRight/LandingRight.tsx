@@ -1,122 +1,55 @@
-import InputAdornment from "@mui/material/InputAdornment";
-import { Button } from "@mui/material";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import { TextField } from "@mui/material";
+import { Card, CardContent, Typography, Link } from "@mui/material";
 import { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-interface FormState {
-  username: string;
-  password: string;
-}
+import Login from "./loginform";
+import Signup from "./signinForm";
 
 const LandingLeft = () => {
-  const navigate = useNavigate();
-  const [form, setForm] = useState<FormState>({ username: "", password: "" });
-  const [isUser, setIsIser] = useState<boolean>(true);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-    setForm((prevForm) => ({ ...prevForm, [name]: value }));
-  };
-
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    console.log("submited");
-    console.log(form);
-    try {
-      const response = await axios.post<{ message: string; token?: string }>(
-        `http://localhost:3000/user/signup`,
-        form
-      );
-      navigate("/todos");
-      if (!response.data.token) return;
-      localStorage.setItem("token", response.data.token);
-      navigate("/");
-      console.log("Server response:", response.data);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as {
-          response?: { data: { message: string } };
-        };
-        // Check if the server responded with an error (non-2xx status code)
-        if (axiosError.response) {
-          // Handle specific error messages from the server
-          console.error("Server error:", axiosError.response.data.message);
-        } else {
-          // Handle network error or unexpected error
-          console.error("Network error or unexpected error:", error.message);
-        }
-      } else {
-        // Handle unexpected error
-        console.error("Unexpected error:", error);
-      }
-    }
+  const [isSignIn, setIsSignIn] = useState(true);
+  const handleToggle = () => {
+    setIsSignIn(!isSignIn);
   };
 
   return (
     <>
-      <Button
-        color="success"
-        onClick={() => {
-          setIsIser((prev) => !prev);
-        }}
-      >
-        {isUser ? "Don't have a Account?" : "Already have an account?"}
-      </Button>
-      <form
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "1rem",
-          flexDirection: "column",
-          height: "10vh",
-          backgroundColor: "#555",
+      <Card sx={{ width: "20rem" }}>
+        <CardContent>
+          <Typography
+            variant="h5"
+            color={"error"}
+            sx={{
+              fontSize: "1.5rem",
+              fontWeight: "700",
+              fontFamily: " 'Rubik' ,sans-serif",
+              lineHeight: "1.05",
+            }}
+          >
+            {isSignIn ? "Login " : "Signup"}
+          </Typography>
+          <Typography variant="body2" color={"#666"} gutterBottom>
+            {isSignIn
+              ? "Welcome back! Login to continue "
+              : "Create an account! "}
+          </Typography>
+          <div style={{ height: "1rem" }}></div>
+          {isSignIn ? (
+            <Login isSignIn={isSignIn}></Login>
+          ) : (
+            <Signup isSignIn={isSignIn}></Signup>
+          )}
 
-          borderRadius: "9px",
-          boxShadow: "-8px 11px 85px -31px rgba(0,0,0,0.35)",
-
-          padding: "10rem 5rem",
-        }}
-      >
-        <TextField
-          id="input-with-icon-textfield"
-          name="username"
-          label="Username"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <AccountCircle />
-              </InputAdornment>
-            ),
-          }}
-          variant="standard"
-          color="success"
-          size="medium"
-          fullWidth
-          onChange={handleChange}
-        />
-        <TextField
-          onChange={handleChange}
-          id="input-with-icon-textfield"
-          name="password"
-          label="Password"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <AccountCircle />
-              </InputAdornment>
-            ),
-          }}
-          variant="standard"
-          color="success"
-          fullWidth
-        />
-      </form>
-      <Button variant="contained" color="success" onClick={handleSubmit}>
-        {isUser ? "Login" : "Submit"}
-      </Button>
+          <div style={{ height: "1rem" }}></div>
+          <Typography
+            variant="body2"
+            align="center"
+            style={{ marginTop: "10px" }}
+          >
+            {isSignIn ? "Don't have an account? " : "Already have an account? "}
+            <Link component="button" color={"error"} onClick={handleToggle}>
+              {isSignIn ? "Sign Up" : "Sign In"}
+            </Link>
+          </Typography>
+        </CardContent>
+      </Card>
     </>
   );
 };

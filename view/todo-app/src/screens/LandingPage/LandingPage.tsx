@@ -1,5 +1,7 @@
 import Grid from "@mui/material/Grid";
 import LandingLeft from "../../component/LandingLeft/Landingleft";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
 import LandingRight from "../../component/LandingRight/LandingRight";
 
 const LandingPage = () => {
@@ -16,8 +18,21 @@ const LandingPage = () => {
           sx={{
             display: "flex",
             justifyContent: "center",
+            flexDirection: "column",
+            alignItems: "center",
+            height: "100vh",
           }}
         >
+          <div
+            style={{ color: "white", padding: "2rem", alignSelf: "flex-end" }}
+          >
+            {" "}
+            <Stack direction="row" spacing={2}>
+              <Button sx={{ color: "white" }}>home</Button>
+
+              <Button sx={{ color: "white" }}>about</Button>
+            </Stack>
+          </div>
           <div
             style={{
               maxWidth: "75%",

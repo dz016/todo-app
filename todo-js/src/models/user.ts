@@ -3,6 +3,8 @@ import mongoose, { Document, Schema } from "mongoose";
 interface UserDoc extends Document {
   username: string;
   password: string;
+  lastname: string;
+  firstname: string;
 }
 const userSchema: Schema<UserDoc> = new Schema({
   username: { type: String, required: true },

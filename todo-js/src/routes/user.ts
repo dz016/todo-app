@@ -8,7 +8,7 @@ import { jwtAuth } from "../middleware/jstAuth";
 
 router.post("/signup", async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, firstname, lastname } = req.body;
     console.log({ username, password });
 
     // Check if username and password are provided
@@ -28,7 +28,12 @@ router.post("/signup", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create a new user with the hashed password
-    const newUser = new User({ username, password: hashedPassword });
+    const newUser = new User({
+      username,
+      password: hashedPassword,
+      firstname,
+      lastname,
+    });
     await newUser.save();
 
     // Issue a JWT token

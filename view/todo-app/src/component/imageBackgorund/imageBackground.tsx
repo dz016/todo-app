@@ -32,15 +32,42 @@ const FadingBackground = () => {
   return (
     <div className={classes.root}>
       <Container maxWidth="md" className={classes.content}>
-        <Typography variant="h2" gutterBottom>
-          Welcome to Our Website
+        <Typography
+          variant="h2"
+          sx={{
+            fontSize: "4.8rem",
+            fontWeight: "800",
+            fontFamily: " 'Rubik' ,sans-serif",
+            lineHeight: "1.05",
+            letterSpacing: "-0.1rem",
+          }}
+          gutterBottom
+        >
+          Remind
         </Typography>
-        <Typography variant="h5" paragraph>
-          Explore and discover amazing things!
+        <Typography
+          variant="h2"
+          sx={{
+            fontSize: "4.8rem",
+            fontWeight: "600",
+            fontFamily: " 'Rubik' ,sans-serif",
+            lineHeight: "1.05",
+            color: "error.main",
+          }}
+        >
+          TODO/
         </Typography>
-        <Button variant="contained" color="primary" className={classes.button}>
-          Get Started
-        </Button>
+        <Typography
+          variant="h2"
+          sx={{
+            fontSize: "4.8rem",
+            fontWeight: "600",
+            fontFamily: " 'Rubik' ,sans-serif",
+            lineHeight: "1.05",
+          }}
+        >
+          Done
+        </Typography>
       </Container>
     </div>
   );
