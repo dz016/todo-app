@@ -92,9 +92,8 @@ const TodoCard = (item: {
     <Card
       sx={{
         minWidth: 200,
-        padding: "0.5rem",
+        padding: "1rem",
       }}
-      raised
     >
       <CardContent>
         <Typography variant="h5" component="div">

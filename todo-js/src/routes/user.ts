@@ -5,6 +5,7 @@ const router = express.Router();
 const SECRET = "ghustaba";
 import bcrypt from "bcrypt";
 import { jwtAuth } from "../middleware/jstAuth";
+import { upload } from "../middleware/jstAuth";
 
 router.post("/signup", async (req, res) => {
   try {
@@ -98,6 +99,83 @@ router.get("/me", jwtAuth, async (req, res) => {
     }
   } catch (error) {
     console.error("Error in /me route:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+// POST update user details or upload profile picture
+router.post(
+  "/profile",
+  jwtAuth,
+  upload.single("profilepicture"),
+  async (req, res) => {
+    try {
+      console.log("inRoute");
+      const userId = req.headers["userId"];
+
+      if (!userId) {
+        return res.status(403).json({ message: "User not logged in" });
+      }
+      console.log(req.file);
+
+      const updatedUser: any = {};
+
+      if (req.file) {
+        updatedUser.image = req.file.path;
+      }
+
+      if (req.body.username) {
+        updatedUser.username = req.body.username;
+      }
+
+      console.log(req.body.firstname);
+      console.log(req.body.lastname);
+
+      if (req.body.firstname) {
+        updatedUser.firstname = req.body.firstname;
+      }
+
+      if (req.body.lastname) {
+        updatedUser.lastname = req.body.lastname;
+      }
+      const user = await User.findByIdAndUpdate(userId, updatedUser, {
+        new: true,
+      });
+
+      if (user) {
+        return res
+          .status(200)
+          .json({ message: "Profile updated successfully" });
+      } else {
+        return res.status(404).json({ message: "User not found" });
+      }
+    } catch (error) {
+      console.error("Error in /profile POST route:", error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+);
+
+// GET profile picture
+router.get("/profile", jwtAuth, async (req, res) => {
+  try {
+    const userId = req.headers["userId"];
+
+    if (!userId) {
+      return res.status(403).json({ message: "User not logged in" });
+    }
+
+    const user = await User.findOne({ _id: userId });
+
+    if (user) {
+      const { username, image, firstname, lastname } = user;
+      console.log(username, image, firstname, lastname);
+      // Respond with the profile picture URL
+      return res.json({ username, image, firstname, lastname });
+    } else {
+      return res.status(404).json({ message: "Profile picture not found" });
+    }
+  } catch (error) {
+    console.error("Error in /profile GET route:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 });

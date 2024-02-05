@@ -43,9 +43,31 @@ const Search = styled("div")(({ theme }) => ({
   width: "100%",
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(3),
-    width: "auto",
+    width: "50%",
   },
 }));
+const currentDate = new Date();
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+// Get various components of the date
+const year = currentDate.getFullYear();
+const month = months[currentDate.getMonth()];
+const day = currentDate.getDate();
+const hours = currentDate.getHours();
+const minutes = currentDate.getMinutes();
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -63,7 +85,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
-    width: "100%",
+    width: "150%",
     color: "black",
 
     [theme.breakpoints.up("md")]: {
@@ -93,26 +115,49 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
       <CssBaseline />
       <AppBar position="fixed">
         <Toolbar sx={{ justifyContent: "space-between" }}>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              sx={{ mr: 2, ...(open && { display: "none" }) }}
-            >
-              <MenuIcon />
-            </IconButton>
-
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ display: { xs: "none", sm: "block" } }}
-            >
-              Dawood
-            </Typography>
-          </div>
+          <Box
+            sx={{
+              backgroundColor: "error.main",
+              padding: "0.3rem",
+              borderRadius: "9px",
+              display: {
+                xs: "none",
+                sm: "block",
+                backgroundColor: "#f44336",
+                padding: "0.3rem",
+                borderRadius: "9px",
+              },
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                sx={{ mr: 2, ...(open && { display: "none" }) }}
+              >
+                <MenuIcon color="secondary" />
+              </IconButton>
+              <Typography
+                variant="h6"
+                noWrap
+                component="div"
+                sx={{
+                  display: {
+                    xs: "none",
+                    sm: "block",
+                    fontWeight: "500",
+                    fontFamily: " 'Rubik' ,sans-serif",
+                    letterSpacing: "-.05rem",
+                  },
+                }}
+              >
+                {day + "th "}
+                {month.toLowerCase()} {year}
+              </Typography>
+            </div>
+          </Box>
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
@@ -123,7 +168,40 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
               onChange={handleChange}
             />
           </Search>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" sx={{}} />
+          <Link to="/user/edit/11" style={{ textDecoration: "none" }}>
+            <Box
+              sx={{
+                padding: ".3rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "1rem",
+                color: "white",
+                borderRadius: "9px",
+                backgroundColor: "error.main",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "1.2rem",
+                  fontWeight: "500",
+                  fontFamily: " 'Rubik' ,sans-serif",
+                  letterSpacing: "-.05rem",
+                  color: "white",
+                }}
+              >
+                Dawood
+              </Typography>
+              <Avatar
+                alt="Remy Sharp"
+                color="error"
+                sx={{
+                  width: "2rem",
+                  height: "2rem",
+                }}
+              />
+            </Box>
+          </Link>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -142,13 +220,22 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
         open={open}
       >
         <DrawerHeader sx={{ backgroundColor: "#" }}>
-          <Typography>TODO APP</Typography>
+          <Typography
+            variant="h6"
+            color={"error"}
+            sx={{
+              fontWeight: "500",
+              fontFamily: " 'Rubik' ,sans-serif",
+              letterSpacing: "-.05rem",
+              alignSelf: "center",
+              justifySelf: "center",
+              marginRight: "4rem",
+            }}
+          >
+            TODO
+          </Typography>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
+            <MenuIcon color="secondary" />
           </IconButton>
         </DrawerHeader>
 

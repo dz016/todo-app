@@ -9,6 +9,7 @@ import { authState } from "./store/state_recoil";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import Edit from "./screens/edit/edit";
+import UserProfileForm from "./screens/UserProfileForm/UserProfileForm";
 
 const theme = createTheme({
   palette: {
@@ -23,7 +24,7 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Router>
-            <InitState></InitState>
+            {/* <InitState></InitState> */}
             <Routes>
               <Route path="/login"></Route>
               <Route path="/signup"></Route>
@@ -34,6 +35,10 @@ function App() {
               <Route path="/" element={<Home></Home>}></Route>
               <Route path="/create" element={<Create></Create>}></Route>
               <Route path="/edit/:id" element={<Edit></Edit>}></Route>
+              <Route
+                path="/user/edit/:id"
+                element={<UserProfileForm></UserProfileForm>}
+              ></Route>
             </Routes>
           </Router>
         </ThemeProvider>
@@ -41,6 +46,9 @@ function App() {
     </>
   );
 }
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function InitState() {
   const setAuth = useSetRecoilState(authState);
   const navigate = useNavigate();

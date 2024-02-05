@@ -71,7 +71,7 @@ const Home = () => {
           >
             {FilteredTodos.map((item, index) => (
               <div key={index}>
-                <TodoCard {...item} />
+                <TodoCard {...item} key={index} />
               </div>
             ))}
           </Masonry>

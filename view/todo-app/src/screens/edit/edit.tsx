@@ -17,6 +17,7 @@ interface CreteType {
 }
 
 const Edit = () => {
+  const [edit, setEdit] = useState(false);
   const location = useLocation();
   const item = location.state || {};
   const [fetchTodo, setFetchTodo] = useRecoilState(fetchTodoState);
@@ -98,6 +99,17 @@ const Edit = () => {
           <div style={{ height: "2rem" }}></div>
           <Button variant="contained" color="success" onClick={handleClick}>
             Create
+          </Button>
+
+          <Button
+            onClick={() => {
+              setEdit(!edit);
+            }}
+            variant="contained"
+            color="success"
+            style={{ marginLeft: "1rem" }}
+          >
+            {edit ? "Edit" : "Profile"}
           </Button>
         </Container>
       </SideBar>
