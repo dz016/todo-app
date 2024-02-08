@@ -22,6 +22,7 @@ const Home = () => {
   const [fetchTodo, setFetchTodo] = useRecoilState(fetchTodoState);
   const auth = useRecoilValue(authState);
   const setTodos = useSetRecoilState(TodoListState);
+
   const getTodo = async () => {
     const headers = {
       "Content-Type": "application/json",
@@ -56,6 +57,9 @@ const Home = () => {
       getTodo();
     }
   }, [auth.token, fetchTodo]);
+  useEffect(() => {}, [auth.token]);
+
+  // const todos = useRecoilValue(TodoListState); // Change here
 
   const FilteredTodos = useRecoilValue(FilterTodoListState); // Change here
 

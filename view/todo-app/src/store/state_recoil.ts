@@ -6,6 +6,21 @@ interface Todo {
   userId: string;
   _id: string;
 }
+export const user = atom({
+  key: "user",
+  default: {
+    username: "",
+    password: "",
+    lastname: "",
+    firstname: "",
+    image: "",
+  },
+});
+
+export const isLoggedIn = atom({
+  key: "isLoggedIn",
+  default: false,
+});
 export const fetchTodoState = atom({
   key: "FetchTodo",
   default: false,

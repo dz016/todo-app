@@ -12,7 +12,7 @@ const useStyles = makeStyles({
     justifyContent: "center",
     alignItems: "center",
     color: "white",
-    background: `linear-gradient(to right top, rgba(75, 0, 0, 0.7) 60%, rgba(0, 0, 0, 0.3)), url("https://media.wired.com/photos/654eaba20d717f189cc4910e/master/w_2240,c_limit/Overwhelmed-With-Emails-for-the-Wrong-Person-Gear-GettyImages-157507192.jpg")`, // Adjust the gradient and image URL as needed
+    background: `linear-gradient(to right top, rgba(20, 0, 0, 0.7) 60%, rgba(0, 0, 0, 0.3)), url("")`, // Adjust the gradient and image URL as needed
     backgroundSize: "cover",
     backgroundPosition: "center",
   },

@@ -7,6 +7,8 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import styled from "@emotion/styled";
 import axios from "axios";
 import Typography from "@mui/material/Typography";
+import { user } from "../../store/state_recoil";
+import { useSetRecoilState } from "recoil";
 
 import { useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
@@ -31,6 +33,7 @@ interface UserProfileFormData {
 }
 
 const UserProfileForm: React.FC = () => {
+  const setUser = useSetRecoilState(user);
   const [edit, setEdit] = useState(false);
   const [formData, setFormData] = useState<UserProfileFormData>({
     firstname: "",
@@ -68,8 +71,12 @@ const UserProfileForm: React.FC = () => {
     };
 
     try {
-      await axios.post("http://localhost:3000/user/profile", data, { headers });
-      console.log("Data sent successfully");
+      const response = await axios.post(
+        "http://localhost:3000/user/profile",
+        data,
+        { headers }
+      );
+      setUser(response.data);
     } catch (error) {
       console.error("Error sending data:", error);
     }
@@ -78,77 +85,97 @@ const UserProfileForm: React.FC = () => {
 
   return (
     <SideBar>
-      <Container maxWidth="sm">
+      <Container
+        maxWidth="sm"
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          height: "85vh",
+          alignItems: "center",
+          flexDirection: "column",
+          backgroundColor: "#222",
+        }}
+      >
         {edit ? (
-          <div>
-            <form
-              onSubmit={handleSubmit}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <TextField
-                label="firstname"
-                name="firstname"
-                value={formData.firstname}
-                onChange={handleInputChange}
-                fullWidth
-                margin="normal"
-              />
-              <TextField
-                label="lastname"
-                name="lastname"
-                value={formData.lastname}
-                onChange={handleInputChange}
-                fullWidth
-                margin="normal"
-              />
-              <TextField
-                label="Username"
-                name="username"
-                value={formData.username}
-                onChange={handleInputChange}
-                fullWidth
-                margin="normal"
-              />
+          <form
+            onSubmit={handleSubmit}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            <TextField
+              label="firstname"
+              name="firstname"
+              value={formData.firstname}
+              onChange={handleInputChange}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="lastname"
+              name="lastname"
+              value={formData.lastname}
+              onChange={handleInputChange}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Username"
+              name="username"
+              value={formData.username}
+              onChange={handleInputChange}
+              fullWidth
+              margin="normal"
+            />
 
-              <Button
-                color="error"
-                component="label"
-                variant="contained"
-                startIcon={<CloudUploadIcon />}
-              >
-                Upload file
-                <VisuallyHiddenInput
-                  type="file"
-                  onChange={handleFileChange}
-                  accept="image/*" // Adjust the file types as needed
-                />
-              </Button>
-              <br />
-              <br />
-              <Button type="submit" variant="contained" color="error" fullWidth>
-                Submit
-              </Button>
-            </form>
-          </div>
+            <Button
+              size="small"
+              color="error"
+              component="label"
+              variant="contained"
+              startIcon={<CloudUploadIcon />}
+              fullWidth
+            >
+              Upload file
+              <VisuallyHiddenInput
+                type="file"
+                onChange={handleFileChange}
+                accept="image/*" // Adjust the file types as needed
+              />
+            </Button>
+            <br />
+
+            <Button
+              size="small"
+              type="submit"
+              variant="contained"
+              color="error"
+              fullWidth
+            >
+              Submit
+            </Button>
+          </form>
         ) : (
           <UserProfile />
         )}
 
         <Button
+          size="small"
           onClick={() => {
             setEdit(!edit);
           }}
           variant="contained"
           color="error"
-          style={{ marginLeft: "1rem" }}
         >
-          {edit ? "Edit" : "Profile"}
+          {!edit ? "Edit" : "Profile"}
         </Button>
+
+        <br />
       </Container>
     </SideBar>
   );

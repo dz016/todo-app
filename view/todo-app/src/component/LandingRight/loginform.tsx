@@ -23,7 +23,7 @@ const Login = ({ isSignIn }: { isSignIn: boolean }) => {
         `http://localhost:3000/user/login`,
         form
       );
-      navigate("/todos");
+      navigate("/");
       if (!response.data.token) return;
       localStorage.setItem("token", response.data.token);
       navigate("/");

@@ -2,7 +2,7 @@ import Home from "./screens/Home";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import LandingPage from "./screens/LandingPage/LandingPage";
-import { RecoilRoot, useSetRecoilState } from "recoil";
+import { RecoilRoot, useRecoilValue, useSetRecoilState } from "recoil";
 import CssBaseline from "@mui/material/CssBaseline";
 import Create from "./screens/create";
 import { authState } from "./store/state_recoil";
@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import Edit from "./screens/edit/edit";
 import UserProfileForm from "./screens/UserProfileForm/UserProfileForm";
+import { user, isLoggedIn } from "./store/state_recoil";
 
 const theme = createTheme({
   palette: {
@@ -24,7 +25,7 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Router>
-            {/* <InitState></InitState> */}
+            <InitState></InitState>
             <Routes>
               <Route path="/login"></Route>
               <Route path="/signup"></Route>
@@ -48,20 +49,30 @@ function App() {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function InitState() {
+  const setUser = useSetRecoilState(user);
+  const isLogedin = useSetRecoilState(isLoggedIn);
   const setAuth = useSetRecoilState(authState);
+  const auth = useRecoilValue(authState);
+  // const auth = useRecoilValue(authState);
   const navigate = useNavigate();
+  console.log("init state");
+  const token = localStorage.getItem("token") || "";
 
   const init = async () => {
-    const token = localStorage.getItem("token");
+    console.log("init func");
+
     try {
       const response = await fetch("http://localhost:3000/user/me", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await response.json();
       if (data.username) {
-        setAuth({ token: data.token, username: data.username });
+        setAuth({ token, username: data.username });
+        setUser(data);
+        isLogedin(true);
+        navigate("/");
+        console.log(data);
       } else {
         navigate("/landing");
       }
@@ -71,12 +82,9 @@ function InitState() {
   };
   useEffect(() => {
     // Make the useEffect function asynchronous and use await for the async operation
-    const initialize = async () => {
-      await init();
-    };
 
-    initialize();
-  }, []);
+    init();
+  }, [token]);
   return <></>;
 }
 

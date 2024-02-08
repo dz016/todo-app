@@ -6,17 +6,25 @@ const SECRET = "ghustaba";
 import bcrypt from "bcrypt";
 import { jwtAuth } from "../middleware/jstAuth";
 import { upload } from "../middleware/jstAuth";
+import { z } from "zod";
+const userDocSchema = z.object({
+  username: z.string().email(),
+  password: z.string().min(8).optional(),
+  lastname: z.string().max(25).optional(),
+  firstname: z.string().max(25).optional(),
+  image: z.string().optional(), // Optional image field
+});
 
 router.post("/signup", async (req, res) => {
   try {
-    const { username, password, firstname, lastname } = req.body;
+    const { username, password, firstname, lastname } = userDocSchema.parse(
+      req.body
+    );
     console.log({ username, password });
 
     // Check if username and password are provided
-    if (!username || !password) {
-      return res
-        .status(400)
-        .json({ message: "Username and password are required" });
+    if (!username || !password || !firstname || !lastname) {
+      return res.status(400).json({ message: "Please fill the form properly" });
     }
 
     // Check if the user already exists
@@ -43,13 +51,20 @@ router.post("/signup", async (req, res) => {
     // Respond with a 201 status code and the token
     res.status(201).json({ message: "User created successfully", token });
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res
+        .status(400)
+        .json({ message: "Validation failed", errors: error.errors });
+    }
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
 router.post("/login", async (req: Request, res: Response) => {
   try {
-    const { username, password } = req.body;
+    const { username, password } = userDocSchema.parse(req.body);
+    console.log({ username, password });
 
     // Check if username and password are provided
     if (!username || !password) {
@@ -61,27 +76,33 @@ router.post("/login", async (req: Request, res: Response) => {
     // Check if the user exists
     const user = await User.findOne({ username });
 
-    if (user) {
-      // Compare the entered password with the stored hashed password
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-
-      if (isPasswordValid) {
-        // Issue a JWT token
-        const token = jwt.sign({ id: user._id }, SECRET, { expiresIn: "1h" });
-        return res.status(200).json({ message: "Login successful", token });
-      } else {
-        // Incorrect password
-        return res.status(401).json({ message: "Invalid password" });
-      }
-    } else {
+    if (!user) {
       // User doesn't exist
       return res.status(404).json({ message: "User not found" });
     }
+
+    // Compare the entered password with the stored hashed password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (isPasswordValid) {
+      // Issue a JWT token
+      const token = jwt.sign({ id: user._id }, SECRET, { expiresIn: "1h" });
+      return res.status(200).json({ message: "Login successful", token });
+    } else {
+      // Incorrect password
+      return res.status(401).json({ message: "Invalid username or password" });
+    }
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      res
+        .status(400)
+        .json({ message: "Validation failed", errors: error.errors });
+    }
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
 router.get("/me", jwtAuth, async (req, res) => {
   try {
     const userId = req.headers["userId"];
@@ -93,7 +114,7 @@ router.get("/me", jwtAuth, async (req, res) => {
     const user = await User.findOne({ _id: userId });
 
     if (user) {
-      return res.json({ username: user.username });
+      return res.json(user);
     } else {
       return res.status(403).json({ message: "User not found" });
     }
@@ -109,7 +130,6 @@ router.post(
   upload.single("profilepicture"),
   async (req, res) => {
     try {
-      console.log("inRoute");
       const userId = req.headers["userId"];
 
       if (!userId) {
@@ -137,18 +157,23 @@ router.post(
       if (req.body.lastname) {
         updatedUser.lastname = req.body.lastname;
       }
+      const validUpdatedUser = userDocSchema.parse(updatedUser);
+      console.log(validUpdatedUser);
       const user = await User.findByIdAndUpdate(userId, updatedUser, {
         new: true,
       });
 
       if (user) {
-        return res
-          .status(200)
-          .json({ message: "Profile updated successfully" });
+        return res.status(200).json(user);
       } else {
         return res.status(404).json({ message: "User not found" });
       }
     } catch (error) {
+      if (error instanceof z.ZodError) {
+        res
+          .status(400)
+          .json({ message: "Validation failed", errors: error.errors });
+      }
       console.error("Error in /profile POST route:", error);
       return res.status(500).json({ message: "Internal server error" });
     }

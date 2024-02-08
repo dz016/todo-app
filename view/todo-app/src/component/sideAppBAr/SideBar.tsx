@@ -13,10 +13,10 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
-import { Avatar } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import { DrawerHeader } from "./sideBarCss";
 import { Main } from "./sideBarCss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 
 import Toolbar from "@mui/material/Toolbar";
@@ -25,10 +25,16 @@ import Typography from "@mui/material/Typography";
 
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
+import { Navigate } from "react-router-dom";
 
 import MailIcon from "@mui/icons-material/Mail";
-import { useSetRecoilState } from "recoil";
-import { SearchBarTextState } from "../../store/state_recoil";
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import {
+  SearchBarTextState,
+  user,
+  isLoggedIn,
+  authState,
+} from "../../store/state_recoil";
 
 const drawerWidth = 240;
 const Search = styled("div")(({ theme }) => ({
@@ -66,8 +72,6 @@ const months = [
 const year = currentDate.getFullYear();
 const month = months[currentDate.getMonth()];
 const day = currentDate.getDate();
-const hours = currentDate.getHours();
-const minutes = currentDate.getMinutes();
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -95,6 +99,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function SideBar({ children }: { children: React.ReactNode }) {
+  const setAuth = useSetRecoilState(authState);
+  const navigate = useNavigate();
+  const setIsLoggedIn = useSetRecoilState(isLoggedIn);
+  const User = useRecoilValue(user);
+  console.log(User);
   const setText = useSetRecoilState(SearchBarTextState);
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -117,16 +126,8 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
         <Toolbar sx={{ justifyContent: "space-between" }}>
           <Box
             sx={{
-              backgroundColor: "error.main",
               padding: "0.3rem",
               borderRadius: "9px",
-              display: {
-                xs: "none",
-                sm: "block",
-                backgroundColor: "#f44336",
-                padding: "0.3rem",
-                borderRadius: "9px",
-              },
             }}
           >
             <div style={{ display: "flex", alignItems: "center" }}>
@@ -190,9 +191,10 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
                   color: "white",
                 }}
               >
-                Dawood
+                {User.firstname}
               </Typography>
               <Avatar
+                src={`http://localhost:3000/${User.image}`}
                 alt="Remy Sharp"
                 color="error"
                 sx={{
@@ -239,32 +241,96 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
           </IconButton>
         </DrawerHeader>
 
-        <List sx={{ height: "100vh" }}>
-          {[
-            { display: "Home", route: "/" },
-            { display: "Create", route: "/create" },
-            { display: "Edit", route: "/Edit" },
-          ].map((text, index) => (
-            <Link
-              to={text.route}
-              style={{ textDecoration: "none", color: "white" }}
-            >
-              <ListItem
-                key={text.display}
-                sx={{
-                  borderBottom: "1px solid #999999;",
-                }}
-                disablePadding
+        <List
+          sx={{
+            height: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+          }}
+        >
+          <div>
+            {[
+              { display: "Home", route: "/" },
+              { display: "Create", route: "/create" },
+            ].map((text, index) => (
+              <Link
+                to={text.route}
+                style={{ textDecoration: "none", color: "white" }}
               >
-                <ListItemButton>
-                  <ListItemIcon>
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={text.display} />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-          ))}
+                <ListItem
+                  key={text.display}
+                  sx={{
+                    borderBottom: "1px solid #999999;",
+                  }}
+                  disablePadding
+                >
+                  <ListItemButton>
+                    <ListItemIcon>
+                      {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                    </ListItemIcon>
+                    <ListItemText primary={text.display} />
+                  </ListItemButton>
+                </ListItem>
+              </Link>
+            ))}
+          </div>
+
+          <ListItem
+            sx={{
+              height: "40%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              margin: "none",
+
+              borderBottom: "none",
+              border: "1px solid #999999;",
+              gap: "1rem",
+              backgroundColor: "#333333",
+              color: "white",
+              borderRadius: "0 0 9px 9px",
+              alignItems: "center",
+              padding: "0",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                width: "100%",
+                padding: "0 1rem",
+              }}
+            >
+              <Typography>
+                {User.firstname} {User.lastname}
+              </Typography>
+              <Avatar
+                alt="Remy Sharp"
+                color="error"
+                src={`http://localhost:3000/${User.image}`}
+                sx={{
+                  width: "2rem",
+                  height: "2rem",
+                }}
+              />
+            </div>
+
+            <Button
+              variant="contained"
+              color="error"
+              onClick={(e) => {
+                e.preventDefault();
+                localStorage.setItem("token", "");
+                setIsLoggedIn(false);
+                navigate("/landing");
+                setAuth({ token: "", username: "" });
+              }}
+            >
+              Logout
+            </Button>
+          </ListItem>
         </List>
       </Drawer>
       <Main open={open}>
