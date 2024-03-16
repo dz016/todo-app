@@ -53,7 +53,7 @@ function InitState() {
   const setUser = useSetRecoilState(user);
   const isLogedin = useSetRecoilState(isLoggedIn);
   const setAuth = useSetRecoilState(authState);
-  const auth = useRecoilValue(authState);
+
   // const auth = useRecoilValue(authState);
   const navigate = useNavigate();
   console.log("init state");

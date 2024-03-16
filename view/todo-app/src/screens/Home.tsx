@@ -3,6 +3,27 @@ import { Container, Typography } from "@mui/material";
 import TodoCard from "../component/TodoCard/TodoCard";
 import Masonry from "react-masonry-css";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"; // Change here
+import Grid from "@mui/material/Grid";
+import { makeStyles } from "@mui/styles";
+
+import Link from "@mui/material/Link";
+// const useStyles = makeStyles((theme) => ({
+//   footer: {
+//     padding: theme.spacing(3, 2),
+//     marginTop: "auto",
+//     backgroundColor: theme.palette.primary.main,
+//     color: theme.palette.primary.contrastText,
+//   },
+//   footerLinks: {
+//     listStyle: "none",
+//     padding: 0,
+//     "& li": {
+//       display: "inline",
+//       marginLeft: theme.spacing(2),
+//     },
+//   },
+// }));
+
 import {
   FilterTodoListState,
   TodoListState,
@@ -80,6 +101,44 @@ const Home = () => {
             ))}
           </Masonry>
         </Container>
+        <div
+          style={{
+            position: "fixed",
+            top: "93%",
+            left: "0",
+            width: "100%",
+
+            height: "7%",
+            backgroundColor: "#2b2b2b",
+          }}
+        >
+          <footer>
+            <Container maxWidth="sm">
+              <Grid container justifyContent="space-between">
+                <Typography variant="body1">
+                  &copy; 2024 Your ToDo App. All rights reserved.
+                </Typography>
+                <ul style={{ display: "flex" }}>
+                  <li>
+                    <Link href="#" color="inherit">
+                      Privacy Policy
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="#" color="inherit">
+                      Terms of Service
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="#" color="inherit">
+                      Contact Us
+                    </Link>
+                  </li>
+                </ul>
+              </Grid>
+            </Container>
+          </footer>
+        </div>
       </SideBar>
     </>
   );

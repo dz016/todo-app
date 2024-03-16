@@ -28,7 +28,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Navigate } from "react-router-dom";
 
 import MailIcon from "@mui/icons-material/Mail";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState, useResetRecoilState, useRecoilValue } from "recoil";
 import {
   SearchBarTextState,
   user,
@@ -99,6 +99,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function SideBar({ children }: { children: React.ReactNode }) {
+  const resetUser = useResetRecoilState(user);
   const setAuth = useSetRecoilState(authState);
   const navigate = useNavigate();
   const setIsLoggedIn = useSetRecoilState(isLoggedIn);
@@ -221,7 +222,7 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
         anchor="left"
         open={open}
       >
-        <DrawerHeader sx={{ backgroundColor: "#" }}>
+        <DrawerHeader sx={{ backgroundColor: "#2b2b2b" }}>
           <Typography
             variant="h6"
             color={"error"}
@@ -232,6 +233,7 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
               alignSelf: "center",
               justifySelf: "center",
               marginRight: "4rem",
+              backgroundcolor: "red",
             }}
           >
             TODO
@@ -287,7 +289,7 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
               borderBottom: "none",
               border: "1px solid #999999;",
               gap: "1rem",
-              backgroundColor: "#333333",
+              backgroundColor: "#2b2b2b",
               color: "white",
               borderRadius: "0 0 9px 9px",
               alignItems: "center",
@@ -326,6 +328,7 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
                 setIsLoggedIn(false);
                 navigate("/landing");
                 setAuth({ token: "", username: "" });
+                resetUser();
               }}
             >
               Logout
@@ -333,6 +336,7 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
           </ListItem>
         </List>
       </Drawer>
+
       <Main open={open}>
         {" "}
         <DrawerHeader />
