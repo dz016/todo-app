@@ -4,7 +4,6 @@ import TodoCard from "../component/TodoCard/TodoCard";
 import Masonry from "react-masonry-css";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"; // Change here
 import Grid from "@mui/material/Grid";
-import { makeStyles } from "@mui/styles";
 
 import Link from "@mui/material/Link";
 // const useStyles = makeStyles((theme) => ({
