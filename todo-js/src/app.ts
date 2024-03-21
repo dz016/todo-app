@@ -4,7 +4,7 @@ import cors from "cors";
 import userRoutes from "./routes/user";
 import todoRoutes from "./routes/todo";
 const app = express();
-const PORT = 3000;
+const PORT = 80;
 console.log("dawood aziz oskayivdsf");
 
 //mongoDb connection
