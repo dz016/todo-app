@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose.js";
 const userSchema = new Schema({
   username: { type: String, required: true },
   password: { type: String, required: true },
